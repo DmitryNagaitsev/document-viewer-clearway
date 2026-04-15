@@ -1,0 +1,44 @@
+@if (annotation(); as annotation) {
+  <div 
+    appDraggable
+    class="annotation-container"
+    [class.dragging]="isDragging()"
+    [class.editing]="isEditing()"
+    [dragBoundary]="containerElement()"
+    [currentX]="annotation.x"
+    [currentY]="annotation.y"
+    [style.left.%]="annotation.x"
+    [style.top.%]="annotation.y"
+    (positionChanged)="onPositionChanged($event)"
+    (dragStarted)="isDragging.set(true)"
+    (dragEnded)="isDragging.set(false)"
+  >
+    <div class="annotation-header">
+      <div class="action-buttons">
+        <button (click)="startEdit()" class="edit-btn" title="Редактировать">
+          ✎
+        </button>
+        <button (click)="delete.emit(annotation.id)" class="delete-btn" title="Удалить">
+          ×
+        </button>
+      </div>
+    </div>
+    @if (isEditing()) {
+      <div class="annotation-edit">
+        <textarea 
+          [(ngModel)]="editText"
+          (keydown.enter)="saveEdit()"
+          (keydown.escape)="cancelEdit()"
+        ></textarea>
+        <div class="edit-actions">
+          <button (click)="saveEdit()" class="save-edit">✓</button>
+          <button (click)="cancelEdit()" class="cancel-edit">✗</button>
+        </div>
+      </div>
+    } @else {
+      <div class="annotation-text">
+        {{ annotation.text }}
+      </div>
+    }
+  </div>
+}

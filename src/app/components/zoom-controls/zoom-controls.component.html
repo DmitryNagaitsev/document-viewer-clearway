@@ -1,0 +1,13 @@
+<div class="zoom-controls">
+    <span>{{ zoomPercent() }}</span>
+    <button 
+        (click)="zoomIn()" 
+        [disabled]="zoom() >= maxZoom"
+        aria-label="Увеличить"
+    >+</button>
+    <button 
+        (click)="zoomOut()" 
+        [disabled]="zoom() <= minZoom"
+        aria-label="Уменьшить"
+    >−</button>
+</div>

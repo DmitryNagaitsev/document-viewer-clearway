@@ -1,0 +1,46 @@
+<div class="viewer-container">
+  <div class="toolbar">
+    <h2>{{ document()?.name }}</h2>
+    
+    <div class="actions">
+      <app-zoom-controls [(zoom)]="zoom" />
+      <button (click)="saveToConsole()" class="save-btn">
+          Сохранить
+      </button>
+    </div>
+  </div>
+  
+  @if (document()) {
+    <div class="document-content">   
+      <div class="pages-container">
+        @for (page of document()?.pages; track page.number; let idx = $index) {
+          <div class="page-wrapper">
+            <div 
+              #pageContainer
+              class="page-container"
+              [style.width.px]="1024 * zoom()"
+              (click)="addAnnotation(page.number, $event)"
+            >
+              <img 
+                [src]="page.imageUrl" 
+                [alt]="'Страница ' + page.number"
+                class="page-image"
+              />
+              
+              @for (annotation of getPageAnnotations(page.number); track annotation.id) {
+                <app-annotation
+                  [annotation]="annotation"
+                  [containerElement]="pageContainer"
+                  [zoom]="zoom()"
+                  (delete)="deleteAnnotation(page.number, annotation.id)"
+                  (textChanged)="updateAnnotationText(page.number, annotation.id, $event)"
+                  (positionChanged)="updateAnnotationPosition(page.number, annotation.id, $event)"
+                />
+              }
+            </div>
+          </div>
+        }
+      </div>
+    </div>
+  }
+</div>

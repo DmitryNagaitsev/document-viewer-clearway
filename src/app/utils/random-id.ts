@@ -1,0 +1,1 @@
+export const getRandomId = () => crypto.randomUUID ? crypto.randomUUID() : `${Date.now()}-${Math.random()}`;
